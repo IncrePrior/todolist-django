@@ -1,95 +1,94 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { FaChevronLeft, FaTrash  } from 'react-icons/fa';
+import { FaChevronLeft, FaTrash } from 'react-icons/fa';
 import { GrHide } from "react-icons/gr";
 
-
-
 const TaskPage = () => {
-
   const { id } = useParams();
   const navigate = useNavigate();
-  let [task, setTask] = useState(null)
+  const [task, setTask] = useState(null);
 
   useEffect(() => {
-    getTask()
-  }, [id])
+    if (id !== 'new') {
+      getTask();
+    }
+  }, [id]);
 
-
-  let getTask = async () => {
-    if (id === 'new') return
-    let response = await fetch(`http://localhost:8000/api/tasks/${id}/`)
-    let data = await response.json()
-    setTask(data)
-  }
-
-
-  let createTask = async () => {
-    fetch(`http://localhost:8000/api/tasks/`, {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(task)
-    })
-  }
-
-
-  let updateTask = async () => {
-    fetch(`http://localhost:8000/api/tasks/${id}/`, {
-      method: "PUT",
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(task)
-    })
-  }
-
-
-
-  let deleteTask = async () => {
-    fetch(`http://localhost:8000/api/tasks/${id}/`, {
-      method: 'DELETE',
-      'headers': {
-        'Content-Type': 'application/json'
-      }
-    })
-    navigate('/')
-  }
-
-
-  const markAsComplete = async () => {
-    const response = await fetch(`http://localhost:8000/api/tasks/${id}/`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    if (response.ok) {
-    setTask({ ...task, completed: true });
-  } 
+  const getTask = async () => {
+    try {
+      const response = await fetch(`http://localhost:8000/api/tasks/${id}/`);
+      const data = await response.json();
+      setTask(data);
+    } catch (error) {
+      console.error('Error fetching task:', error);
+    }
   };
 
+  const createOrUpdateTask = async () => {
+    const url = id === 'new' ? 'http://localhost:8000/api/tasks/' : `http://localhost:8000/api/tasks/${id}/`;
+    const method = id === 'new' ? 'POST' : 'PUT';
 
-  let handleSubmit = () => {
-    if (id !== 'new' && task.body == '') {
-      deleteTask()
-    } else if (id !== 'new') {
-      updateTask()
-    } else if (id === 'new' && task.body !== null) {
-      createTask()
+    try {
+      const response = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(task),
+      });
+
+      if (response.ok) {
+        navigate('/');
+      }
+    } catch (error) {
+      console.error('Error creating/updating task:', error);
     }
-    navigate('/')
-  }
+  };
 
+  const deleteTask = async () => {
+    try {
+      await fetch(`http://localhost:8000/api/tasks/${id}/`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      navigate('/');
+    } catch (error) {
+      console.error('Error deleting task:', error);
+    }
+  };
 
-  let handleChange = (value) => {
-    setTask(task => ({ ...task, 'body': value }))
-  }
+  const markAsComplete = async () => {
+    try {
+      const response = await fetch(`http://localhost:8000/api/tasks/${id}/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
+      if (response.ok) {
+        setTask((prevTask) => ({ ...prevTask, completed: true }));
+      }
+    } catch (error) {
+      console.error('Error marking task as complete:', error);
+    }
+  };
+
+  const handleSubmit = () => {
+    if (id !== 'new' && task.body === '') {
+      deleteTask();
+    } else {
+      createOrUpdateTask();
+    }
+  };
+
+  const handleChange = (value) => {
+    setTask((prevTask) => ({ ...prevTask, body: value }));
+  };
 
   const taskTextClass = task && task.completed ? 'completed-task' : '';
-
 
   return (
     <div className="task">
@@ -101,15 +100,18 @@ const TaskPage = () => {
             <FaChevronLeft />
           )}
         </h3>
-        {id !== 'new' ? (
+        {id !== 'new' && (
           <div>
             <button onClick={markAsComplete}><GrHide /></button>
             <button onClick={deleteTask}><FaTrash /></button>
           </div>
-        ) : null}
-        
+        )}
       </div>
-      <textarea className={`task-text ${taskTextClass}`} onChange={(e) => { handleChange(e.target.value) }} value={task?.body}></textarea>
+      <textarea
+        className={`task-text ${taskTextClass}`}
+        onChange={(e) => handleChange(e.target.value)}
+        value={task?.body}
+      ></textarea>
     </div>
   );
 };
