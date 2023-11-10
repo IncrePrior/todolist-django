@@ -7,27 +7,27 @@
     git clone https://github.com/zouazo/to-do-list/
     ```
 
-2. **Create a virtual environment:**
+2. **Navigate to the project directory:**
     ```bash
-    # Navigate to the project directory
     cd to-do-list
-
-    # Create a virtual environment
+    ```
+    
+3. **Create a virtual environment:**
+    ```bash
     c:/python311/python.exe -m venv env
     ```
 
-3. **Activate the virtual environment:**
+4. **Activate the virtual environment:**
     ```bash
-    # On Windows
     env\scripts\activate
     ```
 
-4. **Install Python dependencies:**
+5. **Install Python dependencies:**
     ```bash
     pip install -r requirements.txt
     ```
 
-5. **Run the Django server:**
+6. **Run the Django server:**
     ```bash
     python manage.py runserver
     ```
@@ -59,5 +59,5 @@ Before running the React frontend, ensure you have Node.js installed.
 5. **Visit the application in your browser:**
     Open [http://localhost:3000/](http://localhost:3000/) in your web browser.
 
-You're all set! The To-Do List Web Application is now running on your machine. 
+You're all set! The To-Do List Web Application is now running on your machine.
 
