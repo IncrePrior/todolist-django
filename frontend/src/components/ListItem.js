@@ -1,44 +1,33 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-let getTime = (task) => {
-    return new Date(task.updated).toLocaleDateString()
-}
+const getTime = (task) => new Date(task.updated).toLocaleDateString();
 
-let getTitle = (task) => {
+const getTitle = (task) => {
+  let title = task.body.split('\n')[0];
+  return title.length > 45 ? title.slice(0, 45) : title;
+};
 
-    let title = task.body.split('\n')[0]
-    if (title.length > 45) {
-        return title.slice(0, 45)
-    }
-    return title
-}
+const getContent = (task) => {
+  const title = getTitle(task);
+  let content = task.body.replaceAll('\n', ' ');
+  content = content.replaceAll(title, '');
 
-
-let getContent = (task) => {
-    let title = getTitle(task)
-    let content = task.body.replaceAll('\n', ' ')
-    content = content.replaceAll(title, '')
-
-    if (content.length > 45) {
-        return content.slice(0, 45) + '...'
-    } else {
-        return content
-    }
-}
-
+  return content.length > 45 ? content.slice(0, 45) + '...' : content;
+};
 
 const ListItem = ({ task }) => {
-    return (
-        <Link to={`/task/${task.id}`}>
-            <div className="tasks-list-item" >
-                <h3>{getTitle(task)}</h3>
-                <p><span>{getTime(task)}</span>{getContent(task)}</p>
-            </div>
+  return (
+    <Link to={`/task/${task.id}`}>
+      <div className="tasks-list-item">
+        <h3>{getTitle(task)}</h3>
+        <p>
+          <span>{getTime(task)}</span>
+          {getContent(task)}
+        </p>
+      </div>
+    </Link>
+  );
+};
 
-        </Link>
-    )
-}
-
-export default ListItem
-
+export default ListItem;
