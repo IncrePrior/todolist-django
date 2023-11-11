@@ -6,20 +6,20 @@
     ```bash
     git clone https://github.com/zouazo/to-do-list/
     ```
-
-2. **Navigate to the project directory:**
-    ```bash
-    cd to-do-list
-    ```
     
-3. **Create a virtual environment:**
+2. **Create a virtual environment:**
     ```bash
     c:/python311/python.exe -m venv env
     ```
 
-4. **Activate the virtual environment:**
+3. **Activate the virtual environment:**
     ```bash
     env\scripts\activate
+    ```
+
+4. **Navigate to the project directory:**
+    ```bash
+    cd to-do-list
     ```
 
 5. **Install Python dependencies:**
