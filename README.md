@@ -51,12 +51,7 @@ Before running the React frontend, ensure you have Node.js installed.
     npm run build
     ```
 
-4. **Start the React development server:**
-    ```bash
-    npm start
-    ```
-
-5. **Visit the application in your browser:**  
+4. **Visit the application in your browser:**  
     Open [http://localhost:8000/](http://localhost:8000/) in your web browser.
 
 You're all set! The To-Do List Web Application is now running on your machine.
