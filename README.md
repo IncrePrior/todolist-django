@@ -57,7 +57,7 @@ Before running the React frontend, ensure you have Node.js installed.
     ```
 
 5. **Visit the application in your browser:**
-    Open [http://localhost:3000/](http://localhost:3000/) in your web browser.
+    Open [http://localhost:8000/](http://localhost:8000/) in your web browser.
 
 You're all set! The To-Do List Web Application is now running on your machine.
 
