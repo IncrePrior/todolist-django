@@ -11,7 +11,7 @@ const TasksListPage = () => {
 
   const getTasks = async () => {
     try {
-      const response = await fetch('/api/tasks/');
+      const response = await fetch('http://localhost:8000/api/tasks/');
       const data = await response.json();
       setTasks(data);
     } catch (error) {
