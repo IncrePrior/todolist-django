@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ListItem from '../components/ListItem';
 import AddButton from '../components/AddButton';
+import axios from 'axios';
 
 const TasksListPage = () => {
   const [tasks, setTasks] = useState([]);
@@ -11,9 +12,8 @@ const TasksListPage = () => {
 
   const getTasks = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/tasks/');
-      const data = await response.json();
-      setTasks(data);
+      const response = await axios.get('/api/tasks/');
+      setTasks(response.data);
     } catch (error) {
       console.error('Error fetching tasks:', error);
     }

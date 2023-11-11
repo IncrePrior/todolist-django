@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FaChevronLeft, FaTrash } from 'react-icons/fa';
 import { GrHide } from "react-icons/gr";
+import axios from 'axios';
 
 const TaskPage = () => {
   const { id } = useParams();
@@ -16,28 +17,27 @@ const TaskPage = () => {
 
   const getTask = async () => {
     try {
-      const response = await fetch(`http://localhost:8000/api/tasks/${id}/`);
-      const data = await response.json();
-      setTask(data);
+      const response = await axios.get(`/api/tasks/${id}/`);
+      setTask(response.data);
     } catch (error) {
       console.error('Error fetching task:', error);
     }
   };
 
   const createOrUpdateTask = async () => {
-    const url = id === 'new' ? 'http://localhost:8000/api/tasks/' : `http://localhost:8000/api/tasks/${id}/`;
-    const method = id === 'new' ? 'POST' : 'PUT';
+    const url = id === 'new' ? '/api/tasks/' : `/api/tasks/${id}/`;
 
     try {
-      const response = await fetch(url, {
-        method,
+      const response = await axios({
+        method: id === 'new' ? 'post' : 'put',
+        url: url,
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(task),
+        data: task,
       });
 
-      if (response.ok) {
+      if (response.status === 200 || response.status === 201) {
         navigate('/');
       }
     } catch (error) {
@@ -47,8 +47,7 @@ const TaskPage = () => {
 
   const deleteTask = async () => {
     try {
-      await fetch(`http://localhost:8000/api/tasks/${id}/`, {
-        method: 'DELETE',
+      await axios.delete(`/api/tasks/${id}/`, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -61,14 +60,13 @@ const TaskPage = () => {
 
   const markAsComplete = async () => {
     try {
-      const response = await fetch(`http://localhost:8000/api/tasks/${id}/`, {
-        method: 'POST',
+      const response = await axios.post(`/api/tasks/${id}/`, null, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
 
-      if (response.ok) {
+      if (response.status === 200) {
         setTask((prevTask) => ({ ...prevTask, completed: true }));
       }
     } catch (error) {
